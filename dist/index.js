@@ -37,13 +37,17 @@ const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 
 });
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
+app.use(express_1.default.json());
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.send("welcome to backend");
     try {
         const books = yield invokeAction({ action: "getAll" });
         res.send(books);
+        // res.send("welcome to backend");
     }
-    catch (err) { }
+    catch (err) {
+        res.send("Uuos, some error occurred...");
+    }
 }));
 app.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.send("welcome to backend");
@@ -58,20 +62,21 @@ app.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, functi
             return res.send("You must provide a valid bookId");
         res.send(book);
     }
-    catch (err) { }
+    catch (err) {
+        res.send("Uuos, some error occurred...");
+    }
 }));
 app.post("/books/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.send("welcome to backend");
-    // if (!req.body) return res.send("You must provide a request body");
-    var _a;
-    // const { author, title } = req.body;
-    if (!req.body) {
-    }
-    const reqBody = (_a = req.body) !== null && _a !== void 0 ? _a : { title: "Worm", author: "John C. McCrae" };
+    if (!req.body.title || !req.body.author)
+        return res.send("You must provide a book object");
+    const reqBody = req.body;
+    //{ title: "Worm", author: "John C. McCrae" };
     try {
         const book = yield invokeAction(Object.assign({ action: "add" }, reqBody));
         res.send(book);
     }
-    catch (err) { }
+    catch (err) {
+        res.send("Uuos, some error occurred...");
+    }
 }));
 app.listen(port, () => console.log("Server running on port: " + port));

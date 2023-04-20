@@ -42,6 +42,8 @@ const invokeAction = async ({
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.json());
+
 app.get("/", async (req: Request, res: Response) => {
   // res.send("welcome to backend");
   try {
@@ -50,7 +52,7 @@ app.get("/", async (req: Request, res: Response) => {
     // res.send("welcome to backend");
   } catch (err) {
     res.send("Uuos, some error occurred...");
-  } 
+  }
 });
 
 app.get("/books/:bookId", async (req: Request, res: Response) => {
@@ -66,29 +68,26 @@ app.get("/books/:bookId", async (req: Request, res: Response) => {
     if (!book) return res.send("You must provide a valid bookId");
 
     res.send(book);
-  } catch (err) {}
+  } catch (err) {
+    res.send("Uuos, some error occurred...");
+  }
 });
 
 app.post("/books/", async (req: Request, res: Response) => {
-  // res.send("welcome to backend");
-  // if (!req.body) return res.send("You must provide a request body");
+  if (!req.body.title || !req.body.author) return res.send("You must provide a book object");
 
-  // const { author, title } = req.body;
-
-  if(!req.body) {
-
-  }
-
-  const reqBody = req.body ?? { title: "Worm", author: "John C. McCrae" };
+  const reqBody = req.body 
+  //{ title: "Worm", author: "John C. McCrae" };
 
   try {
     const book = await invokeAction({
       action: "add",
       ...reqBody,
     });
-
     res.send(book);
-  } catch (err) {}
+  } catch (err) {
+    res.send("Uuos, some error occurred...");
+  }
 });
 
 app.listen(port, () => console.log("Server running on port: " + port));
