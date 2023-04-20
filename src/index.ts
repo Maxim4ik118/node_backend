@@ -45,9 +45,12 @@ const port = process.env.PORT || 3000;
 app.get("/", async (req: Request, res: Response) => {
   // res.send("welcome to backend");
   try {
-    const books = await invokeAction({ action: "getAll" });
-    res.send(books);
-  } catch (err) {}
+    // const books = await invokeAction({ action: "getAll" });
+    // res.send(books);
+    res.send("welcome to backend");
+  } catch (err) {
+    res.send("Uuos, some error occurred...");
+  } 
 });
 
 app.get("/books/:bookId", async (req: Request, res: Response) => {
