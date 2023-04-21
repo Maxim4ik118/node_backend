@@ -59,13 +59,13 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // res.send("welcome to backend");
     }
     catch (err) {
-        res.send("Uuos, some error occurred...");
+        res.status(403).send("Uuos, some error occurred...");
     }
 }));
 app.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.send("welcome to backend");
     if (!req.params.bookId)
-        return res.send("You must provide a bookId");
+        return res.status(404).send("You must provide a bookId");
     try {
         const book = yield invokeAction({
             action: "getById",
@@ -76,15 +76,15 @@ app.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.send(book);
     }
     catch (err) {
-        res.send("Uuos, some error occurred...");
+        res.status(403).send("Uuos, some error occurred...");
     }
 }));
 app.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.send("welcome to backend");
     if (!req.params.bookId)
-        return res.send("You must provide a bookId");
+        return res.status(404).send("You must provide a bookId");
     if (!req.body.title || !req.body.author)
-        return res.send("You must provide a new book data!");
+        return res.status(404).send("You must provide a new book data!");
     try {
         const updatedBook = yield invokeAction({
             action: "updateById",
@@ -97,13 +97,13 @@ app.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.send(updatedBook);
     }
     catch (err) {
-        res.send("Uuos, some error occurred...");
+        res.status(403).send("Uuos, some error occurred...");
     }
 }));
 app.delete("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.send("welcome to backend");
     if (!req.params.bookId)
-        return res.send("You must provide a bookId");
+        return res.status(404);
     try {
         const deletedBook = yield invokeAction({
             action: "deleteById",
@@ -114,12 +114,12 @@ app.delete("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.send(deletedBook);
     }
     catch (err) {
-        res.send("Uuos, some error occurred...");
+        res.status(403).send("Uuos, some error occurred...");
     }
 }));
 app.post("/books/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.title || !req.body.author)
-        return res.send("You must provide a book object");
+        return res.status(404).send("You must provide a book object");
     const reqBody = req.body;
     //{ title: "Worm", author: "John C. McCrae" };
     try {
@@ -127,7 +127,7 @@ app.post("/books/", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.send(book);
     }
     catch (err) {
-        res.send("Uuos, some error occurred...");
+        res.status(403).send("Uuos, some error occurred...");
     }
 }));
 app.listen(port, () => console.log("Server running on port: " + port));
