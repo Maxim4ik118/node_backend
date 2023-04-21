@@ -32,6 +32,12 @@ const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 
             const createdBook = yield (0, books_1.add)({ title, author });
             return createdBook;
         }
+        case "updateById": {
+            if (!id || !title || !author)
+                throw new Error("You must provide a title and an author!");
+            const updatedBook = yield (0, books_1.updateById)(id, { title, author });
+            return updatedBook;
+        }
         default:
             return null;
     }
@@ -62,6 +68,27 @@ app.get("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!book)
             return res.send("You must provide a valid bookId");
         res.send(book);
+    }
+    catch (err) {
+        res.send("Uuos, some error occurred...");
+    }
+}));
+app.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // res.send("welcome to backend");
+    if (!req.params.bookId)
+        return res.send("You must provide a bookId");
+    if (!req.body.title || !req.body.author)
+        return res.send("You must provide a new book data!");
+    try {
+        const updatedBook = yield invokeAction({
+            action: "updateById",
+            id: req.params.bookId,
+            title: req.body.title,
+            author: req.body.author,
+        });
+        if (!updatedBook)
+            return res.send("You must provide a valid bookId");
+        res.send(updatedBook);
     }
     catch (err) {
         res.send("Uuos, some error occurred...");

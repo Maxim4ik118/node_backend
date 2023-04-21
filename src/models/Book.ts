@@ -4,9 +4,6 @@ export type Book = {
   author: string;
 };
 
-export type InvokeBookAction = {
-  action: "getAll" | "getById" | "getByAuthor" | "getByTitle" | "add";
-  title?: string;
-  id?: string;
-  author?: string;
+export interface InvokeBookAction extends Partial<Book>  {
+  action: "getAll" | "getById" | "getByAuthor" | "getByTitle" | "add" | "updateById",
 };

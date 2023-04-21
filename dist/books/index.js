@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.add = exports.getById = exports.getAll = void 0;
+exports.updateById = exports.add = exports.getById = exports.getAll = void 0;
 // import { nanoid } from "nanoid";
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
@@ -33,7 +33,18 @@ const add = (bookData) => __awaiter(void 0, void 0, void 0, function* () {
     const newBook = Object.assign({ id: nanoid() }, bookData);
     const books = yield getAll();
     const updatedBooks = [...books, newBook];
-    yield promises_1.default.writeFile(booksPath, JSON.stringify(updatedBooks));
+    yield promises_1.default.writeFile(booksPath, JSON.stringify(updatedBooks, null, 2));
     return newBook;
 });
 exports.add = add;
+const updateById = (bookId, bookData) => __awaiter(void 0, void 0, void 0, function* () {
+    const books = yield getAll();
+    const index = books.findIndex(book => book.id === bookId);
+    if (index === -1) {
+        return null;
+    }
+    books[index] = Object.assign({ id: bookId }, bookData);
+    yield promises_1.default.writeFile(booksPath, JSON.stringify(books, null, 2));
+    return books[index];
+});
+exports.updateById = updateById;
