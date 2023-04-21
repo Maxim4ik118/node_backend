@@ -1,13 +1,10 @@
 // import { nanoid } from "nanoid";
 import fs from "fs/promises";
 import path from "path";
+import { Book } from "../models";
 const {nanoid} = require("nanoid");
 
-type Book = {
-  id: string;
-  title: string;
-  author: string;
-};
+
 
 const booksPath = path.join(__dirname, "./books.json");
 

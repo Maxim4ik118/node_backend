@@ -17,15 +17,14 @@ const books_1 = require("./books");
 const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 0, void 0, function* () {
     switch (action) {
         case "getAll": {
-            // console.log( await getAll());
             const books = yield (0, books_1.getAll)();
             return books;
         }
         case "getById": {
             if (!id)
                 throw new Error("You must provide an id!");
-            const book = yield (0, books_1.getById)(id);
-            return book;
+            const oneBook = yield (0, books_1.getById)(id);
+            return oneBook;
         }
         case "add": {
             if (!title || !author)
@@ -33,6 +32,8 @@ const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 
             const createdBook = yield (0, books_1.add)({ title, author });
             return createdBook;
         }
+        default:
+            return null;
     }
 });
 const app = (0, express_1.default)();

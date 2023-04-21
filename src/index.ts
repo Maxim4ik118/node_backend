@@ -1,31 +1,26 @@
 import express, { Request, Response } from "express";
+
 import { add, getAll, getById } from "./books";
 
-type InvokeBookAction = {
-  action: "getAll" | "getById" | "getByAuthor" | "getByTitle" | "add";
-  title?: string;
-  id?: string;
-  author?: string;
-};
+import { Book, InvokeBookAction } from "./models";
 
 const invokeAction = async ({
   action,
   title,
   id,
   author,
-}: InvokeBookAction) => {
+}: InvokeBookAction): Promise<Book[] | Book | null> => {
   switch (action) {
     case "getAll": {
-      // console.log( await getAll());
       const books = await getAll();
       return books;
     }
     case "getById": {
       if (!id) throw new Error("You must provide an id!");
 
-      const book = await getById(id);
+      const oneBook = await getById(id);
 
-      return book;
+      return oneBook;
     }
 
     case "add": {
@@ -36,6 +31,8 @@ const invokeAction = async ({
 
       return createdBook;
     }
+    default:
+      return null;
   }
 };
 
@@ -74,9 +71,10 @@ app.get("/books/:bookId", async (req: Request, res: Response) => {
 });
 
 app.post("/books/", async (req: Request, res: Response) => {
-  if (!req.body.title || !req.body.author) return res.send("You must provide a book object");
+  if (!req.body.title || !req.body.author)
+    return res.send("You must provide a book object");
 
-  const reqBody = req.body 
+  const reqBody = req.body;
   //{ title: "Worm", author: "John C. McCrae" };
 
   try {
