@@ -38,6 +38,12 @@ const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 
             const updatedBook = yield (0, books_1.updateById)(id, { title, author });
             return updatedBook;
         }
+        case "deleteById": {
+            if (!id)
+                throw new Error("You must provide a title and an author!");
+            const deletedBook = yield (0, books_1.deleteById)(id);
+            return deletedBook;
+        }
         default:
             return null;
     }
@@ -89,6 +95,23 @@ app.put("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!updatedBook)
             return res.send("You must provide a valid bookId");
         res.send(updatedBook);
+    }
+    catch (err) {
+        res.send("Uuos, some error occurred...");
+    }
+}));
+app.delete("/books/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // res.send("welcome to backend");
+    if (!req.params.bookId)
+        return res.send("You must provide a bookId");
+    try {
+        const deletedBook = yield invokeAction({
+            action: "deleteById",
+            id: req.params.bookId,
+        });
+        if (!deletedBook)
+            return res.send("You must provide a valid bookId");
+        res.send(deletedBook);
     }
     catch (err) {
         res.send("Uuos, some error occurred...");

@@ -33,17 +33,31 @@ const updateById = async (
   bookData: Pick<Book, "author" | "title">
 ) => {
   const books = await getAll();
-  const index = books.findIndex(book => book.id === bookId);
+  const index = books.findIndex((book) => book.id === bookId);
 
-  if(index === -1) {
+  if (index === -1) {
     return null;
   }
 
-  books[index] = { id: bookId, ...bookData }
+  books[index] = { id: bookId, ...bookData };
 
   await fs.writeFile(booksPath, JSON.stringify(books, null, 2));
- 
+
   return books[index];
 };
 
-export { getAll, getById, add, updateById };
+const deleteById = async (bookId: string) => {
+  const books = await getAll();
+  const index = books.findIndex((book) => book.id === bookId);
+
+  if (index === -1) {
+    return null;
+  }
+  const [result] = books.splice(index, 1);
+
+  await fs.writeFile(booksPath, JSON.stringify(books, null, 2));
+
+  return result;
+};
+
+export { getAll, getById, add, updateById, deleteById };

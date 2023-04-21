@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 
-import { add, getAll, getById, updateById } from "./books";
+import { add, deleteById, getAll, getById, updateById } from "./books";
 
 import { Book, InvokeBookAction } from "./models";
 
@@ -39,6 +39,14 @@ const invokeAction = async ({
       const updatedBook = await updateById(id, { title, author });
 
       return updatedBook;
+    }
+    case "deleteById": {
+      if (!id)
+        throw new Error("You must provide a title and an author!");
+
+      const deletedBook = await deleteById(id);
+
+      return deletedBook;
     }
     default:
       return null;
@@ -94,6 +102,23 @@ app.put("/books/:bookId", async (req: Request, res: Response) => {
     if (!updatedBook) return res.send("You must provide a valid bookId");
 
     res.send(updatedBook);
+  } catch (err) {
+    res.send("Uuos, some error occurred...");
+  }
+});
+
+app.delete("/books/:bookId", async (req: Request, res: Response) => {
+  // res.send("welcome to backend");
+  if (!req.params.bookId) return res.send("You must provide a bookId");
+  try {
+    const deletedBook = await invokeAction({
+      action: "deleteById",
+      id: req.params.bookId,
+    });
+
+    if (!deletedBook) return res.send("You must provide a valid bookId");
+
+    res.send(deletedBook);
   } catch (err) {
     res.send("Uuos, some error occurred...");
   }

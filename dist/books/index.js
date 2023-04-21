@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateById = exports.add = exports.getById = exports.getAll = void 0;
+exports.deleteById = exports.updateById = exports.add = exports.getById = exports.getAll = void 0;
 // import { nanoid } from "nanoid";
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
@@ -39,7 +39,7 @@ const add = (bookData) => __awaiter(void 0, void 0, void 0, function* () {
 exports.add = add;
 const updateById = (bookId, bookData) => __awaiter(void 0, void 0, void 0, function* () {
     const books = yield getAll();
-    const index = books.findIndex(book => book.id === bookId);
+    const index = books.findIndex((book) => book.id === bookId);
     if (index === -1) {
         return null;
     }
@@ -48,3 +48,14 @@ const updateById = (bookId, bookData) => __awaiter(void 0, void 0, void 0, funct
     return books[index];
 });
 exports.updateById = updateById;
+const deleteById = (bookId) => __awaiter(void 0, void 0, void 0, function* () {
+    const books = yield getAll();
+    const index = books.findIndex((book) => book.id === bookId);
+    if (index === -1) {
+        return null;
+    }
+    const [result] = books.splice(index, 1);
+    yield promises_1.default.writeFile(booksPath, JSON.stringify(books, null, 2));
+    return result;
+});
+exports.deleteById = deleteById;
