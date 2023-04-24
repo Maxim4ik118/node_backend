@@ -12,17 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const date_fns_1 = require("date-fns");
 const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const books_1 = __importDefault(require("./routes/api/books"));
-const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.app = (0, express_1.default)();
+exports.app.use((0, cors_1.default)());
+exports.app.use(express_1.default.json());
+exports.app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { method, path: requestPath } = req;
     const logFilePath = path_1.default.join(__dirname, "./public/server.log");
     const requestTimeStamp = (0, date_fns_1.format)(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -30,7 +30,7 @@ app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield promises_1.default.appendFile(logFilePath, `${logString} \n`);
     next();
 }));
-app.use("/api/books", books_1.default);
+exports.app.use("/api/books", books_1.default);
 // app.get("/api/books", async (req: Request, res: Response) => {
 //   // res.json("welcome to backend");
 //   try {
@@ -105,10 +105,9 @@ app.use("/api/books", books_1.default);
 //     res.status(403).json("Uuos, some error occurred...");
 //   }
 // });
-app.use((req, res) => {
+exports.app.use((req, res) => {
     const { method, path } = req;
     res.status(404).json({
         message: `Route with path ${path} and method ${method} wasn't found!`,
     });
 });
-app.listen(port, () => console.log("Server running on port: " + port));

@@ -7,8 +7,7 @@ import fs from "fs/promises";
 
 import booksRouter from "./routes/api/books";
 
-const app = express();
-const port = process.env.PORT || 3000;
+export const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -120,4 +119,3 @@ app.use((req, res) => {
   });
 });
 
-app.listen(port, () => console.log("Server running on port: " + port));
