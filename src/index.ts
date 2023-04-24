@@ -169,4 +169,13 @@ app.post("/books/", async (req: Request, res: Response) => {
   }
 });
 
+app.use((req, res) => {
+  const { method, path } = req;
+  res
+    .status(404)
+    .json({
+      message: `Route with path ${path} and method ${method} wasn't found!`,
+    });
+});
+
 app.listen(port, () => console.log("Server running on port: " + port));

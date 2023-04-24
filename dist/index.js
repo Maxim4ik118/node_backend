@@ -148,4 +148,12 @@ app.post("/books/", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(403).json("Uuos, some error occurred...");
     }
 }));
+app.use((req, res) => {
+    const { method, path } = req;
+    res
+        .status(404)
+        .json({
+        message: `Route with path ${path} and method ${method} wasn't found!`,
+    });
+});
 app.listen(port, () => console.log("Server running on port: " + port));
