@@ -1,18 +1,22 @@
+import path from "path";
+import fs from "fs/promises";
 import express, { Request, Response } from "express";
+import { format } from "date-fns";
 
 import { add, deleteById, getAll, getById, updateById } from "./books";
 
-import { Book, InvokeBookAction } from "./models";
+import { Book, InvokeActionProps } from "./models";
 
 const invokeAction = async ({
   action,
   title,
   id,
   author,
-}: InvokeBookAction): Promise<Book[] | Book | null> => {
+}: InvokeActionProps): Promise<Book[] | Book | null> => {
   switch (action) {
     case "getAll": {
       const books = await getAll();
+
       return books;
     }
     case "getById": {
@@ -41,8 +45,7 @@ const invokeAction = async ({
       return updatedBook;
     }
     case "deleteById": {
-      if (!id)
-        throw new Error("You must provide a title and an author!");
+      if (!id) throw new Error("You must provide a title and an author!");
 
       const deletedBook = await deleteById(id);
 
@@ -53,25 +56,46 @@ const invokeAction = async ({
   }
 };
 
+// const actionIndex = process.argv.indexOf("--action");
+// const arr = hideBin(process.argv);
+// const { argv } = yargs(arr) as { argv: InvokeActionProps };
+
+// new Promise(async (resolve, reject) => {
+//   const result = await invokeAction(argv);
+//   resolve(console.log(result));
+// });
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get("/", async (req: Request, res: Response) => {
-  // res.send("welcome to backend");
+app.use(async (req, res, next) => {
+  const { method, path: requestPath } = req;
+  const logFilePath = path.join(__dirname, "./public/server.log");
+
+  const requestTimeStamp = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+  const logString = `${method} ${requestPath} ${requestTimeStamp}`;
+  await fs.appendFile(logFilePath, `${logString} \n`);
+
+  next();
+});
+
+app.get("/books", async (req: Request, res: Response) => {
+  // res.json("welcome to backend");
   try {
     const books = await invokeAction({ action: "getAll" });
-    res.send(books);
-    // res.send("welcome to backend");
+    res.json(books);
+    // res.json("welcome to backend");
   } catch (err) {
-    res.status(403).send("Uuos, some error occurred...");
+    res.status(403).json("Uuos, some error occurred...");
   }
 });
 
 app.get("/books/:bookId", async (req: Request, res: Response) => {
-  // res.send("welcome to backend");
-  if (!req.params.bookId) return res.status(404).send("You must provide a bookId");
+  // res.json("welcome to backend");
+  if (!req.params.bookId)
+    return res.status(404).json("You must provide a bookId");
 
   try {
     const book = await invokeAction({
@@ -79,18 +103,20 @@ app.get("/books/:bookId", async (req: Request, res: Response) => {
       id: req.params.bookId,
     });
 
-    if (!book) return res.send("You must provide a valid bookId");
+    if (!book) return res.json("You must provide a valid bookId");
 
-    res.send(book);
+    res.json(book);
   } catch (err) {
-    res.status(403).send("Uuos, some error occurred...");
+    res.status(403).json("Uuos, some error occurred...");
   }
 });
 
 app.put("/books/:bookId", async (req: Request, res: Response) => {
-  // res.send("welcome to backend");
-  if (!req.params.bookId) return res.status(404).send("You must provide a bookId");
-  if(!req.body.title || !req.body.author) return res.status(404).send("You must provide a new book data!");
+  // res.json("welcome to backend");
+  if (!req.params.bookId)
+    return res.status(404).json("You must provide a bookId");
+  if (!req.body.title || !req.body.author)
+    return res.status(404).json("You must provide a new book data!");
   try {
     const updatedBook = await invokeAction({
       action: "updateById",
@@ -99,34 +125,35 @@ app.put("/books/:bookId", async (req: Request, res: Response) => {
       author: req.body.author,
     });
 
-    if (!updatedBook) return res.send("You must provide a valid bookId");
+    if (!updatedBook) return res.json("You must provide a valid bookId");
 
-    res.send(updatedBook);
+    res.json(updatedBook);
   } catch (err) {
-    res.status(403).send("Uuos, some error occurred...");
+    res.status(403).json("Uuos, some error occurred...");
   }
 });
 
 app.delete("/books/:bookId", async (req: Request, res: Response) => {
-  // res.send("welcome to backend");
-  if (!req.params.bookId) return res.status(404).send("You must provide a bookId");
+  // res.json("welcome to backend");
+  if (!req.params.bookId)
+    return res.status(404).json("You must provide a bookId");
   try {
     const deletedBook = await invokeAction({
       action: "deleteById",
       id: req.params.bookId,
     });
 
-    if (!deletedBook) return res.send("You must provide a valid bookId");
+    if (!deletedBook) return res.json("You must provide a valid bookId");
 
-    res.send(deletedBook);
+    res.json(deletedBook);
   } catch (err) {
-    res.status(403).send("Uuos, some error occurred...");
+    res.status(403).json("Uuos, some error occurred...");
   }
 });
 
 app.post("/books/", async (req: Request, res: Response) => {
   if (!req.body.title || !req.body.author)
-    return res.status(404).send("You must provide a book object");
+    return res.status(404).json("You must provide a book object");
 
   const reqBody = req.body;
   //{ title: "Worm", author: "John C. McCrae" };
@@ -136,9 +163,9 @@ app.post("/books/", async (req: Request, res: Response) => {
       action: "add",
       ...reqBody,
     });
-    res.send(book);
+    res.json(book);
   } catch (err) {
-    res.status(403).send("Uuos, some error occurred...");
+    res.status(403).json("Uuos, some error occurred...");
   }
 });
 

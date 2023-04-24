@@ -1,1 +1,1 @@
-export { Book, InvokeBookAction } from './Book';
+export { Book, InvokeActionProps, InvokeActions } from './Book';

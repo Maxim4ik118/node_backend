@@ -1,9 +1,10 @@
+export type InvokeActions = "getAll" | "getById" | "deleteById" | "add" | "updateById"
 export type Book = {
   id: string;
   title: string;
   author: string;
 };
 
-export interface InvokeBookAction extends Partial<Book>  {
-  action: "getAll" | "getById" | "deleteById" | "add" | "updateById",
+export interface InvokeActionProps extends Partial<Book>  {
+  action: InvokeActions,
 };
