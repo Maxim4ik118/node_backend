@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import { add, deleteById, getAll, getById, updateById } from "../../books";
 
-import { Book, InvokeActionProps } from "../../models";
+import { Book, InvokeActionProps, ServerError } from "../../models";
+import { HttpError } from "../../helpers";
 
 const invokeAction = async ({
   action,
@@ -54,43 +55,44 @@ const invokeAction = async ({
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
-  // res.json("welcome to backend");
+router.get("/", async (req: Request, res: Response, next) => {
   try {
     const books = await invokeAction({ action: "getAll" });
     res.json(books);
-    // res.json("welcome to backend");
   } catch (err) {
-    res.status(403).json("Uuos, some error occurred...");
+    next(err);
   }
 });
 
-router.get("/:bookId", async (req: Request, res: Response) => {
-  // res.json("welcome to backend");
-  if (!req.params.bookId)
-    return res.status(404).json("You must provide a bookId");
-
+router.get("/:bookId", async (req: Request, res: Response, next) => {
   try {
+    if (!req.params.bookId) {
+      throw HttpError(404, "Not found! You must provide a bookId!");
+    }
+
     const book = await invokeAction({
       action: "getById",
       id: req.params.bookId,
     });
 
-    if (!book) return res.json("You must provide a valid bookId");
+    if (!book) {
+      throw HttpError(404, "Not found! You must provide a another bookId!");
+    }
 
     res.json(book);
   } catch (err) {
-    res.status(403).json("Uuos, some error occurred...");
+    next(err);
   }
 });
 
-router.put("/:bookId", async (req: Request, res: Response) => {
-  // res.json("welcome to backend");
-  if (!req.params.bookId)
-    return res.status(404).json("You must provide a bookId");
-  if (!req.body.title || !req.body.author)
-    return res.status(404).json("You must provide a new book data!");
+router.put("/:bookId", async (req: Request, res: Response, next) => {
   try {
+    if (!req.params.bookId) {
+      throw HttpError(404, "Not found! You must provide a bookId!");
+    }
+    if (!req.body.title || !req.body.author) {
+      throw HttpError(404, "You must provide a request body!");
+    }
     const updatedBook = await invokeAction({
       action: "updateById",
       id: req.params.bookId,
@@ -98,35 +100,40 @@ router.put("/:bookId", async (req: Request, res: Response) => {
       author: req.body.author,
     });
 
-    if (!updatedBook) return res.json("You must provide a valid bookId");
+    if (!updatedBook) {
+      throw HttpError(404, "Not found! You must provide a bookId!");
+    }
 
     res.json(updatedBook);
   } catch (err) {
-    res.status(403).json("Uuos, some error occurred...");
+    next(err);
   }
 });
 
-router.delete("/:bookId", async (req: Request, res: Response) => {
-  // res.json("welcome to backend");
-  if (!req.params.bookId)
-    return res.status(404).json("You must provide a bookId");
+router.delete("/:bookId", async (req: Request, res: Response, next) => {
   try {
+    if (!req.params.bookId) {
+      throw HttpError(404, "Not found! You must provide a bookId!");
+    }
     const deletedBook = await invokeAction({
       action: "deleteById",
       id: req.params.bookId,
     });
 
-    if (!deletedBook) return res.json("You must provide a valid bookId");
+    if (!deletedBook) {
+      throw HttpError(404, "Not found! You must provide a bookId!");
+    }
 
     res.json(deletedBook);
   } catch (err) {
-    res.status(403).json("Uuos, some error occurred...");
+    next(err);
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  if (!req.body.title || !req.body.author)
-    return res.status(404).json("You must provide a book object");
+router.post("/", async (req: Request, res: Response, next) => {
+  if (!req.body.title || !req.body.author) {
+    throw HttpError(404, "You must provide a request body!");
+  }
 
   const reqBody = req.body;
   //{ title: "Worm", author: "John C. McCrae" };
@@ -138,9 +145,8 @@ router.post("/", async (req: Request, res: Response) => {
     });
     res.json(book);
   } catch (err) {
-    res.status(403).json("Uuos, some error occurred...");
+    next(err);
   }
 });
-
 
 export default router;

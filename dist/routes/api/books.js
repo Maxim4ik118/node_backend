@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const books_1 = require("../../books");
+const helpers_1 = require("../../helpers");
 const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 0, void 0, function* () {
     switch (action) {
         case "getAll": {
@@ -49,75 +50,78 @@ const invokeAction = ({ action, title, id, author, }) => __awaiter(void 0, void 
     }
 });
 const router = express_1.default.Router();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.json("welcome to backend");
+router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const books = yield invokeAction({ action: "getAll" });
         res.json(books);
-        // res.json("welcome to backend");
     }
     catch (err) {
-        res.status(403).json("Uuos, some error occurred...");
+        next(err);
     }
 }));
-router.get("/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.json("welcome to backend");
-    if (!req.params.bookId)
-        return res.status(404).json("You must provide a bookId");
+router.get("/:bookId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.params.bookId) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
         const book = yield invokeAction({
             action: "getById",
             id: req.params.bookId,
         });
-        if (!book)
-            return res.json("You must provide a valid bookId");
+        if (!book) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a another bookId!");
+        }
         res.json(book);
     }
     catch (err) {
-        res.status(403).json("Uuos, some error occurred...");
+        next(err);
     }
 }));
-router.put("/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.json("welcome to backend");
-    if (!req.params.bookId)
-        return res.status(404).json("You must provide a bookId");
-    if (!req.body.title || !req.body.author)
-        return res.status(404).json("You must provide a new book data!");
+router.put("/:bookId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.params.bookId) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
+        if (!req.body.title || !req.body.author) {
+            throw (0, helpers_1.HttpError)(404, "You must provide a request body!");
+        }
         const updatedBook = yield invokeAction({
             action: "updateById",
             id: req.params.bookId,
             title: req.body.title,
             author: req.body.author,
         });
-        if (!updatedBook)
-            return res.json("You must provide a valid bookId");
+        if (!updatedBook) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
         res.json(updatedBook);
     }
     catch (err) {
-        res.status(403).json("Uuos, some error occurred...");
+        next(err);
     }
 }));
-router.delete("/:bookId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // res.json("welcome to backend");
-    if (!req.params.bookId)
-        return res.status(404).json("You must provide a bookId");
+router.delete("/:bookId", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.params.bookId) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
         const deletedBook = yield invokeAction({
             action: "deleteById",
             id: req.params.bookId,
         });
-        if (!deletedBook)
-            return res.json("You must provide a valid bookId");
+        if (!deletedBook) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
         res.json(deletedBook);
     }
     catch (err) {
-        res.status(403).json("Uuos, some error occurred...");
+        next(err);
     }
 }));
-router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.body.title || !req.body.author)
-        return res.status(404).json("You must provide a book object");
+router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.title || !req.body.author) {
+        throw (0, helpers_1.HttpError)(404, "You must provide a request body!");
+    }
     const reqBody = req.body;
     //{ title: "Worm", author: "John C. McCrae" };
     try {
@@ -125,7 +129,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(book);
     }
     catch (err) {
-        res.status(403).json("Uuos, some error occurred...");
+        next(err);
     }
 }));
 exports.default = router;
