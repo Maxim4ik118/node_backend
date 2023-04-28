@@ -1,13 +1,15 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import logger from "morgan";
+import dotenv from "dotenv";
 
 import booksRouter from "./routes/api/books";
 import { ServerError } from "./models";
 import { HttpError } from "./helpers";
 
-const app = express();
+dotenv.config();
 
+const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 

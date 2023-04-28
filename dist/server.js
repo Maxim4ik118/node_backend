@@ -5,11 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("./app");
+const DB_HOST = process.env.DB_HOST;
+//   "engines": {
+// "node": ">=14 <15"
+//   },
 const port = process.env.PORT || 3000;
-const DB_HOST = "mongodb+srv://Maxi:Maxim4ik118@cluster0.mvxsjks.mongodb.net/books_reader?retryWrites=true&w=majority";
 mongoose_1.default.set("strictQuery", true);
 mongoose_1.default
-    .connect(DB_HOST)
+    .connect(DB_HOST || "")
     .then(() => {
     app_1.app.listen(port, () => console.log("Server running on port: " + port));
 })
