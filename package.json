@@ -10,6 +10,9 @@
     "build": "tsc",
     "start": "node dist/server.js"
   },
+  "engines": {
+    "node": ">=14 <15"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
