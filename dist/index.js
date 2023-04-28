@@ -11,6 +11,7 @@ const morgan_1 = __importDefault(require("morgan"));
 // import path from "path";
 // import fs from "fs/promises";
 const books_1 = __importDefault(require("./routes/api/books"));
+const helpers_1 = require("./helpers");
 exports.app = (0, express_1.default)();
 const formatsLogger = exports.app.get("env") === "development" ? "dev" : "short";
 exports.app.use((0, morgan_1.default)(formatsLogger));
@@ -27,8 +28,9 @@ exports.app.use(express_1.default.json());
 exports.app.use("/api/books", books_1.default);
 exports.app.use((req, res) => {
     const { method, path } = req;
-    res.status(404).json({
-        message: `Route with path ${path} and method ${method} wasn't found!`,
+    const error = (0, helpers_1.HttpError)(404, `Route with path ${path} and method ${method} wasn't found!`);
+    res.status(error.status).json({
+        message: error.message,
     });
 });
 exports.app.use((err, req, res, next) => {

@@ -8,6 +8,7 @@ import logger from "morgan";
 
 import booksRouter from "./routes/api/books";
 import { ServerError } from "./models";
+import { HttpError } from "./helpers";
 
 export const app = express();
 
@@ -32,8 +33,13 @@ app.use("/api/books", booksRouter);
 
 app.use((req, res) => {
   const { method, path } = req;
-  res.status(404).json({
-    message: `Route with path ${path} and method ${method} wasn't found!`,
+  const error = HttpError(
+    404,
+    `Route with path ${path} and method ${method} wasn't found!`
+  );
+
+  res.status(error.status).json({
+    message: error.message,
   });
 });
 
