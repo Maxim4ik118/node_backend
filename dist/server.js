@@ -7,7 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("./app");
 const DB_HOST = process.env.DB_HOST;
 //   "engines": {
-// "node": ">=14 <15"
+//     "node": ">=14 <15"
 //   },
 const port = process.env.PORT || 3000;
 mongoose_1.default.set("strictQuery", true);

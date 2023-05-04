@@ -1,2 +1,2 @@
-export { Book, InvokeActionProps, InvokeActions } from './Book';
-export { ServerError } from './Error';
+export { Book, BookType, BookGenre, schemas } from "./Book";
+export { ServerError } from "./Error";

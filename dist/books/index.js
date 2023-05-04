@@ -12,50 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.updateById = exports.add = exports.getById = exports.getAll = void 0;
-// import { nanoid } from "nanoid";
-const promises_1 = __importDefault(require("fs/promises"));
+exports.add = exports.getAll = void 0;
 const path_1 = __importDefault(require("path"));
-const { nanoid } = require("nanoid");
+const models_1 = require("../models");
 const booksPath = path_1.default.join(__dirname, "./books.json");
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield promises_1.default.readFile(booksPath, "utf-8");
-    return JSON.parse(data);
+    // const data = await fs.readFile(booksPath, "utf-8");
+    const data = yield models_1.Book.find();
+    return data;
 });
 exports.getAll = getAll;
-const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const books = yield getAll();
-    const book = books.find((book) => book.id === id);
-    return book || null;
-});
-exports.getById = getById;
+// const getById = async (id: string): Promise<BookType | null> => {
+//   const books = await getAll();
+//   const book = books.find((book) => book.id === id);
+//   return book || null;
+// };
 const add = (bookData) => __awaiter(void 0, void 0, void 0, function* () {
-    const newBook = Object.assign({ id: nanoid() }, bookData);
-    const books = yield getAll();
-    const updatedBooks = [...books, newBook];
-    yield promises_1.default.writeFile(booksPath, JSON.stringify(updatedBooks, null, 2));
+    // const newBook = { id: nanoid(), ...bookData };
+    // const books = await getAll();
+    // const updatedBooks = [...books, newBook];
+    // await fs.writeFile(booksPath, JSON.stringify(updatedBooks, null, 2));
+    const newBook = models_1.Book.create(bookData);
     return newBook;
 });
 exports.add = add;
-const updateById = (bookId, bookData) => __awaiter(void 0, void 0, void 0, function* () {
-    const books = yield getAll();
-    const index = books.findIndex((book) => book.id === bookId);
-    if (index === -1) {
-        return null;
-    }
-    books[index] = Object.assign({ id: bookId }, bookData);
-    yield promises_1.default.writeFile(booksPath, JSON.stringify(books, null, 2));
-    return books[index];
-});
-exports.updateById = updateById;
-const deleteById = (bookId) => __awaiter(void 0, void 0, void 0, function* () {
-    const books = yield getAll();
-    const index = books.findIndex((book) => book.id === bookId);
-    if (index === -1) {
-        return null;
-    }
-    const [result] = books.splice(index, 1);
-    yield promises_1.default.writeFile(booksPath, JSON.stringify(books, null, 2));
-    return result;
-});
-exports.deleteById = deleteById;
