@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BooksController = void 0;
-// import { BookType, InvokeActionProps } from "../models";
 const books_1 = require("../books");
 const helpers_1 = require("../helpers");
 const BooksController = {
@@ -18,30 +17,36 @@ const BooksController = {
         const books = yield (0, books_1.getAll)();
         res.json(books);
     })),
-    // getBookById: ctrlWrapper(async (req: Request, res: Response) => {
-    // const book = await getById(req.params.bookId);
-    //   if (!book) {
-    //     throw HttpError(404, "Not found! You must provide a another bookId!");
-    //   }
-    //   res.json(book);
-    // }),
-    // editBookById: ctrlWrapper(async (req: Request, res: Response) => {
-    // const {title, author} = req.body;
-    // const bookId = req.params.bookId;
-    // const updatedBook = await updateById(bookId, { title, author });
-    //   if (!updatedBook) {
-    //     throw HttpError(404, "Not found! You must provide a bookId!");
-    //   }
-    //   res.json(updatedBook);
-    // }),
-    // deleteBookById: ctrlWrapper(async (req: Request, res: Response) => {
-    // const bookId = req.params.bookId;
-    // const deletedBook = await deleteById(bookId);
-    //   if (!deletedBook) {
-    //     throw HttpError(404, "Not found! You must provide a bookId!");
-    //   }
-    //   res.json(deletedBook);
-    // }),
+    getBookById: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const book = yield (0, books_1.getById)(req.params.bookId);
+        if (!book) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a another bookId!");
+        }
+        res.json(book);
+    })),
+    editBookById: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const { title, author, favourite, genre, year } = req.body;
+        const bookId = req.params.bookId;
+        const updatedBook = yield (0, books_1.updateById)(bookId, {
+            title,
+            author,
+            favourite,
+            genre,
+            year,
+        });
+        if (!updatedBook) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
+        res.json(updatedBook);
+    })),
+    deleteBookById: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const bookId = req.params.bookId;
+        const deletedBook = yield (0, books_1.deleteById)(bookId);
+        if (!deletedBook) {
+            throw (0, helpers_1.HttpError)(404, "Not found! You must provide a bookId!");
+        }
+        res.json(deletedBook);
+    })),
     addBook: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //{ title: "Worm", author: "John C. McCrae" };
         const createdBook = yield (0, books_1.add)(req.body);

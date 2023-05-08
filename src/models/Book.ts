@@ -4,6 +4,7 @@ import { handleMongooseError } from "../helpers";
 import Joi from "joi";
 
 type BookType = {
+  _id: string;
   title: string;
   author: string;
   favourite: boolean;
@@ -19,11 +20,11 @@ enum BookGenre {
 // type BookGenres = "fantastic" | "love" | "thriller";
 
 const dateRegExp = /^\d{2}-\d{2}-\d{4}$/;
-const bookGenres: Array<string> = [
+const bookGenres = [
   BookGenre.fantastic,
   BookGenre.love,
   BookGenre.thriller,
-];
+] as const;
 
 const bookSchema = new Schema<BookType>(
   {
@@ -66,8 +67,13 @@ const addBookSchema = Joi.object({
   year: Joi.string().pattern(dateRegExp).required(),
 });
 
+const updateFavoriteSchema = Joi.object({
+  favourite: Joi.boolean().required(),
+});
+
 const schemas = {
   addBookSchema,
+  updateFavoriteSchema
 };
 
 // solving problem mongoose error response with wrong error status

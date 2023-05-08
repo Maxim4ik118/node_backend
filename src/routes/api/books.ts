@@ -2,7 +2,7 @@ import express from "express";
 
 import { BooksController } from "../../controllers";
 
-import { validateBody } from "../../middlewares";
+import { validateBody, validateObjectId } from "../../middlewares";
 
 import { schemas } from "../../models";
 
@@ -11,14 +11,27 @@ const router = express.Router();
 // --------- GET all books from the list ---------
 router.get("/", BooksController.getAllBooks);
 
-// // --------- GET a conctete book by id from the list ---------
-// router.get("/:bookId", BooksController.getBookById);
+// --------- GET a conctete book by id from the list ---------
+router.get("/:bookId", validateObjectId, BooksController.getBookById);
 
-// // --------- EDIT book to the list ---------
-// router.put("/:bookId", validateBody(addBookSchema), BooksController.editBookById);
+// --------- EDIT book to the list ---------
+router.put(
+  "/:bookId",
+  validateObjectId,
+  validateBody(schemas.addBookSchema),
+  BooksController.editBookById
+);
 
-// // --------- DELETE book to the list ---------
-// router.delete("/:bookId", BooksController.deleteBookById);
+// --------- UPDATE favourite book from the list ---------
+router.patch(
+  "/:bookId/favourite",
+  validateObjectId,
+  validateBody(schemas.updateFavoriteSchema),
+  BooksController.updateFavoriteById
+);
+
+// --------- DELETE book to the list ---------
+router.delete("/:bookId", validateObjectId, BooksController.deleteBookById);
 
 // --------- ADD book to the list ---------
 router.post("/", validateBody(schemas.addBookSchema), BooksController.addBook);
