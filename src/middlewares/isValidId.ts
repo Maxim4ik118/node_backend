@@ -3,10 +3,10 @@ import { isValidObjectId } from "mongoose";
 import { HttpError } from "../helpers";
 
 const validateObjectId = (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
-  const isValidId = isValidObjectId(id);
+  const { bookId } = req.params;
+  const isValidId = isValidObjectId(bookId);
   if (!isValidId) {
-    next(HttpError(400, `${id} isn't valid id!`));
+    next(HttpError(400, `${bookId} isn't valid id!`));
   }
   next();
 };

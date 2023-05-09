@@ -57,8 +57,12 @@ const addBookSchema = joi_1.default.object({
         .required(),
     year: joi_1.default.string().pattern(dateRegExp).required(),
 });
+const updateFavoriteSchema = joi_1.default.object({
+    favourite: joi_1.default.boolean().required(),
+});
 const schemas = {
     addBookSchema,
+    updateFavoriteSchema
 };
 exports.schemas = schemas;
 // solving problem mongoose error response with wrong error status

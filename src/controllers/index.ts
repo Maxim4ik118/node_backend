@@ -1,1 +1,2 @@
-export { BooksController } from './books';
+export { BooksController } from "./books";
+export { AuthController } from "./auth";

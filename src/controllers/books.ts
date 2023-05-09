@@ -31,7 +31,7 @@ const BooksController = {
       BookType,
       "_id"
     >;
-    const bookId = req.params.bookId;
+    const { bookId } = req.params;
     const updatedBook = await updateById(bookId, {
       title,
       author,
@@ -62,8 +62,8 @@ const BooksController = {
     res.status(201).json(createdBook);
   }),
   updateFavoriteById: ctrlWrapper(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const updatedBook = await updateFavorite(id, req.body);
+    const { bookId } = req.params;
+    const updatedBook = await updateFavorite(bookId, req.body);
 
     if (!updatedBook) {
       throw HttpError(404, "Not found! You must provide a bookId!");

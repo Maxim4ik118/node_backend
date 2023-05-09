@@ -4,6 +4,7 @@ import logger from "morgan";
 import dotenv from "dotenv";
 
 import booksRouter from "./routes/api/books";
+import authRouter from "./routes/api/auth";
 import { ServerError } from "./models";
 import { HttpError } from "./helpers";
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/books", booksRouter);
+app.use("/api/auth", authRouter);
 
 app.use((req, res) => {
   const { method, path } = req;

@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.schemas = exports.BookGenre = exports.Book = void 0;
+exports.authShemas = exports.User = exports.schemas = exports.BookGenre = exports.Book = void 0;
 var Book_1 = require("./Book");
 Object.defineProperty(exports, "Book", { enumerable: true, get: function () { return Book_1.Book; } });
 Object.defineProperty(exports, "BookGenre", { enumerable: true, get: function () { return Book_1.BookGenre; } });
 Object.defineProperty(exports, "schemas", { enumerable: true, get: function () { return Book_1.schemas; } });
+var User_1 = require("./User");
+Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
+Object.defineProperty(exports, "authShemas", { enumerable: true, get: function () { return User_1.authShemas; } });
