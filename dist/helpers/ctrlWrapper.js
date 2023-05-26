@@ -13,7 +13,7 @@ exports.ctrlWrapper = void 0;
 const ctrlWrapper = (ctrl) => {
     const wrapperFunc = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            yield ctrl(req, res, next);
+            ctrl(req, res, next);
         }
         catch (error) {
             next(error);

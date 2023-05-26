@@ -77,7 +77,7 @@ const schemas = {
 };
 
 // solving problem mongoose error response with wrong error status
-bookSchema.post("save", { errorHandler: true }, handleMongooseError);
+bookSchema.post("save", handleMongooseError);
 
 const Book = model<BookType>("book", bookSchema);
 

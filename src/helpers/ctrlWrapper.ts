@@ -9,7 +9,7 @@ const ctrlWrapper = (
     next: NextFunction
   ) => {
     try {
-      await ctrl(req, res, next);
+      ctrl(req, res, next);
     } catch (error) {
       next(error);
     }

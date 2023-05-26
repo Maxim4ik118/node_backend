@@ -66,6 +66,6 @@ const schemas = {
 };
 exports.schemas = schemas;
 // solving problem mongoose error response with wrong error status
-bookSchema.post("save", { errorHandler: true }, helpers_1.handleMongooseError);
+bookSchema.post("save", helpers_1.handleMongooseError);
 const Book = (0, mongoose_1.model)("book", bookSchema);
 exports.Book = Book;

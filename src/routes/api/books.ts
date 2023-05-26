@@ -4,7 +4,7 @@ import { BooksController } from "../../controllers";
 
 import { validateBody, validateObjectId } from "../../middlewares";
 
-import { schemas } from "../../models";
+import { schemas } from "../../models/Book";
 
 const router = express.Router();
 

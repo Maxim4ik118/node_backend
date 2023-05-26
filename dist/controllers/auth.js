@@ -11,8 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const helpers_1 = require("../helpers");
+const models_1 = require("../models");
 const AuthController = {
     register: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const newUser = yield models_1.User.create(req.body);
+        console.log('newUser: ', newUser);
+        res.status(201).json({ email: newUser.email, name: newUser.name });
     })),
     login: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     })),

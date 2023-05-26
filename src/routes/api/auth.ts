@@ -1,19 +1,19 @@
 import express from "express";
 import { AuthController } from "../../controllers";
 import { validateBody } from "../../middlewares";
-import { authShemas } from "../../models";
+import { schemas } from "../../models/User";
 
 const router = express.Router();
 
 router.post(
   "/register",
-  validateBody(authShemas.registerUserBodySchema),
+  validateBody(schemas.registerUserBodySchema),
   AuthController.register
 );
 
 router.post(
   "/login",
-  validateBody(authShemas.loginUserBodySchema),
+  validateBody(schemas.loginUserBodySchema),
   AuthController.login
 );
 

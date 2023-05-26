@@ -21,6 +21,7 @@ const userSchema = new Schema<UserType>(
       type: String,
       required: true,
       match: emailValidateRegex,
+      unique: true,
     },
     password: {
       type: String,
@@ -30,6 +31,8 @@ const userSchema = new Schema<UserType>(
   },
   { versionKey: false, timestamps: true }
 );
+
+userSchema.post("save", handleMongooseError);
 
 const registerUserBodySchema = Joi.object({
   name: Joi.string().required(),
@@ -48,6 +51,5 @@ const schemas = {
 
 const User = model<UserType>("user", userSchema);
 
-userSchema.post("save", { errorHandler: true }, handleMongooseError);
 
-export { User, UserType, schemas as authShemas };
+export { User, UserType, schemas };
