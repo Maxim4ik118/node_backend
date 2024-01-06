@@ -36,7 +36,7 @@ app.use((req, res) => {
 app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
   const { status = 500, message = "Oops, some 'Server error' occurred... " } =
     err;
-    
+
   res.status(status).json({ message });
 });
 

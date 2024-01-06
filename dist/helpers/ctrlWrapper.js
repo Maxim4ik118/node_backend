@@ -16,6 +16,7 @@ const ctrlWrapper = (ctrl) => {
             ctrl(req, res, next);
         }
         catch (error) {
+            console.log("error1231231: ", error);
             next(error);
         }
     });
