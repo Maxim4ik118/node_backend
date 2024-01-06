@@ -6,6 +6,7 @@ import {
   validateBody,
   validateObjectId,
   authenticate,
+  upload,
 } from "../../middlewares";
 
 import { schemas } from "../../models/Book";
@@ -53,7 +54,10 @@ router.delete(
 router.post(
   "/",
   authenticate,
-  validateBody(schemas.addBookSchema),
+  // validateBody(schemas.addBookSchema),
+  upload.single("poster"),
+  // upload.array("poster", 8),
+  // upload.fileds([{name: "poster", maxCount: 1}, {name: "poster2", maxCount: 1}]),
   BooksController.addBook
 );
 

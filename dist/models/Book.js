@@ -34,6 +34,9 @@ const bookSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    poster: {
+        type: String,
+    },
     genre: {
         type: String,
         required: true,

@@ -8,6 +8,7 @@ type BookType = {
   title: string;
   author: string;
   favourite: boolean;
+  poster: string;
   genre: "fantastic" | "love" | "thriller";
   year: string;
 };
@@ -39,6 +40,9 @@ const bookSchema = new Schema<BookType>(
     favourite: {
       type: Boolean,
       default: false,
+    },
+    poster: {
+      type: String,
     },
     genre: {
       type: String,

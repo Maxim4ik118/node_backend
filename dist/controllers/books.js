@@ -8,10 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BooksController = void 0;
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
 const services_1 = require("../services");
 const helpers_1 = require("../helpers");
+const postersPath = path_1.default.resolve("dist", "public", "posters");
 const BooksController = {
     getAllBooks: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const books = yield (0, services_1.getAll)();
@@ -49,7 +55,13 @@ const BooksController = {
     })),
     addBook: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //{ title: "Worm", author: "John C. McCrae" };
-        const createdBook = yield (0, services_1.add)(req.body);
+        // const user = req.user
+        const newPath = path_1.default.join(postersPath, req.file.filename);
+        console.log(req.file.path, newPath);
+        yield promises_1.default.rename(req.file.path, newPath);
+        const poster = path_1.default.join("public", "posters", req.file.filename);
+        const createdBook = yield (0, services_1.add)(Object.assign(Object.assign({}, req.body), { poster }));
+        // res.status(201).json(createdBook);
         res.status(201).json(createdBook);
     })),
     updateFavoriteById: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import fs from "fs/promises";
+import path from "path";
 
 import {
   getAll,
@@ -11,6 +13,8 @@ import {
 
 import { HttpError, ctrlWrapper } from "../helpers";
 import { BookType } from "../models";
+
+const postersPath = path.resolve("dist", "public", "posters");
 
 const BooksController = {
   getAllBooks: ctrlWrapper(async (req: Request, res: Response) => {
@@ -57,8 +61,15 @@ const BooksController = {
   }),
   addBook: ctrlWrapper(async (req: Request, res: Response) => {
     //{ title: "Worm", author: "John C. McCrae" };
+    // const user = req.user
 
-    const createdBook = await add(req.body);
+    const newPath = path.join(postersPath, req.file!.filename);
+
+    console.log(req.file!.path, newPath);
+    await fs.rename(req.file!.path, newPath);
+    const poster = path.join("public", "posters", req.file!.filename);
+    const createdBook = await add({ ...req.body, poster });
+    // res.status(201).json(createdBook);
     res.status(201).json(createdBook);
   }),
   updateFavoriteById: ctrlWrapper(async (req: Request, res: Response) => {

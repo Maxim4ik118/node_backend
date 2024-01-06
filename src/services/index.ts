@@ -15,7 +15,7 @@ const getAll = async (): Promise<BookType[]> => {
 const getById = async (id: string): Promise<BookType | null> => {
   // const books = await getAll();
   // const book = books.find((book) => book._id === id);
-  const book = Book.findById(id);
+  const book = await Book.findById(id);
 
   return book || null;
 };
@@ -27,12 +27,12 @@ const add = async (bookData: BookType): Promise<BookType> => {
 
   // await fs.writeFile(booksPath, JSON.stringify(updatedBooks, null, 2));
 
-  const newBook = Book.create(bookData);
+  const newBook = await Book.create(bookData);
 
   return newBook;
 };
 
-const updateById = async (bookId: string, bookData: Omit<BookType, "_id">) => {
+const updateById = async (bookId: string, bookData: Partial<BookType>) => {
   // const books = await getAll();
   // const index = books.findIndex((book) => book.id === bookId);
 
@@ -44,7 +44,7 @@ const updateById = async (bookId: string, bookData: Omit<BookType, "_id">) => {
 
   // await fs.writeFile(booksPath, JSON.stringify(books, null, 2));
   // const newBookWithoutId = { ...bookData };
-  const updatedBook = Book.findByIdAndUpdate(bookId, bookData, { new: true });
+  const updatedBook = await Book.findByIdAndUpdate(bookId, bookData, { new: true });
 
   return updatedBook;
 };
@@ -59,7 +59,7 @@ const deleteById = async (bookId: string) => {
   // const [result] = books.splice(index, 1);
 
   // await fs.writeFile(booksPath, JSON.stringify(books, null, 2));
-  const result = Book.findByIdAndRemove(bookId);
+  const result = await Book.findByIdAndRemove(bookId);
 
   return result;
 };

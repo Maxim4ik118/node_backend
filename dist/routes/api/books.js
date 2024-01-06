@@ -19,5 +19,10 @@ router.patch("/:bookId/favourite", middlewares_1.authenticate, middlewares_1.val
 // --------- DELETE book to the list ---------
 router.delete("/:bookId", middlewares_1.authenticate, middlewares_1.validateObjectId, controllers_1.BooksController.deleteBookById);
 // --------- ADD book to the list ---------
-router.post("/", middlewares_1.authenticate, (0, middlewares_1.validateBody)(Book_1.schemas.addBookSchema), controllers_1.BooksController.addBook);
+router.post("/", middlewares_1.authenticate, 
+// validateBody(schemas.addBookSchema),
+middlewares_1.upload.single("poster"), 
+// upload.array("poster", 8),
+// upload.fileds([{name: "poster", maxCount: 1}, {name: "poster2", maxCount: 1}]),
+controllers_1.BooksController.addBook);
 exports.default = router;
