@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateFavorite = exports.deleteById = exports.updateById = exports.add = exports.getById = exports.getAll = void 0;
-const models_1 = require("../models");
+const models_1 = require("@/models");
 // const booksPath = path.join(__dirname, "./books.json");
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     // const data = await fs.readFile(booksPath, "utf-8");

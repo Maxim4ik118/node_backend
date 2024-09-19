@@ -1,15 +1,15 @@
 import express from "express";
 
-import { BooksController } from "../../controllers";
+import { BooksController } from "@/controllers";
 
 import {
   validateBody,
   validateObjectId,
   authenticate,
   upload,
-} from "../../middlewares";
+} from "@/middlewares";
 
-import { schemas } from "../../models/Book";
+import { schemas } from "@/models/Book";
 
 const router = express.Router();
 

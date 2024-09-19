@@ -3,10 +3,11 @@ import cors from "cors";
 import logger from "morgan";
 import dotenv from "dotenv";
 
-import booksRouter from "./routes/api/books";
-import authRouter from "./routes/api/auth";
-import { ServerError } from "./models";
-import { HttpError } from "./helpers";
+import "./plugins/moduleAlias";
+import booksRouter from "@/routes/api/books";
+import authRouter from "@/routes/api/auth";
+import { ServerError } from "@/models";
+import { HttpError } from "@/helpers";
 
 dotenv.config();
 
@@ -39,5 +40,7 @@ app.use((err: ServerError, req: Request, res: Response, next: NextFunction) => {
 
   res.status(status).json({ message });
 });
+
+/* Generate and use your API key */
 
 export { app };

@@ -1,7 +1,7 @@
 import express from "express";
-import { AuthController } from "../../controllers";
-import { validateBody } from "../../middlewares";
-import { schemas } from "../../models/User";
+import { AuthController } from "@/controllers";
+import { validateBody } from "@/middlewares";
+import { schemas } from "@/models/User";
 
 const router = express.Router();
 
@@ -15,6 +15,16 @@ router.post(
   "/login",
   validateBody(schemas.loginUserBodySchema),
   AuthController.login
+);
+
+router.get(
+  "/verify/:verificationToken",
+  AuthController.verify
+);
+router.post(
+  "/verify",
+  validateBody(schemas.verifyAgainEmailBodySchema),
+  AuthController.verifyAgain
 );
 
 export default router;

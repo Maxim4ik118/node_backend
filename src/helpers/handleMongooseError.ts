@@ -1,4 +1,4 @@
-import { ServerError } from "../models";
+import { ServerError } from "@/models";
 import { CallbackWithoutResultAndOptionalError } from "mongoose";
 
 const handleMongooseError = (

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.schemas = exports.User = exports.UserSubscription = void 0;
 const joi_1 = __importDefault(require("joi"));
 const mongoose_1 = require("mongoose");
-const helpers_1 = require("../helpers");
+const helpers_1 = require("@/helpers");
 exports.UserSubscription = {
     STARTER: "starter",
     PRO: "pro",
@@ -37,6 +37,14 @@ const userSchema = new mongoose_1.Schema({
     token: {
         type: String,
     },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+    },
     subscription: {
         type: String,
         enum: userSubscriptions,
@@ -54,9 +62,13 @@ const loginUserBodySchema = joi_1.default.object({
     email: joi_1.default.string().pattern(emailValidateRegex).required(),
     password: joi_1.default.string().min(6).required(),
 });
+const verifyAgainEmailBodySchema = joi_1.default.object({
+    email: joi_1.default.string().pattern(emailValidateRegex).required(),
+});
 const schemas = {
     registerUserBodySchema,
     loginUserBodySchema,
+    verifyAgainEmailBodySchema,
 };
 exports.schemas = schemas;
 const User = (0, mongoose_1.model)("user", userSchema);

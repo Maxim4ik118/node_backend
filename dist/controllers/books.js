@@ -16,7 +16,7 @@ exports.BooksController = void 0;
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 const services_1 = require("../services");
-const helpers_1 = require("../helpers");
+const helpers_1 = require("@/helpers");
 const postersPath = path_1.default.resolve("dist", "public", "posters");
 const BooksController = {
     getAllBooks: (0, helpers_1.ctrlWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,7 +59,7 @@ const BooksController = {
         const newPath = path_1.default.join(postersPath, req.file.filename);
         console.log(req.file.path, newPath);
         yield promises_1.default.rename(req.file.path, newPath);
-        const poster = path_1.default.join("public", "posters", req.file.filename);
+        const poster = path_1.default.join("posters", req.file.filename);
         const createdBook = yield (0, services_1.add)(Object.assign(Object.assign({}, req.body), { poster }));
         // res.status(201).json(createdBook);
         res.status(201).json(createdBook);

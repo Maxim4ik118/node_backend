@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { handleMongooseError } from "../helpers";
+import { handleMongooseError } from "@/helpers";
 
 import Joi from "joi";
 

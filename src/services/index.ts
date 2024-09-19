@@ -2,7 +2,7 @@
 // import fs from "fs/promises";
 // import path from "path";
 import { boolean } from "joi";
-import { Book, BookType } from "../models";
+import { Book, BookType } from "@/models";
 
 // const booksPath = path.join(__dirname, "./books.json");
 

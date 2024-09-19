@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookGenre = exports.schemas = exports.Book = void 0;
 const mongoose_1 = require("mongoose");
-const helpers_1 = require("../helpers");
+const helpers_1 = require("@/helpers");
 const joi_1 = __importDefault(require("joi"));
 var BookGenre;
 (function (BookGenre) {

@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Schema, model } from "mongoose";
-import { handleMongooseError } from "../helpers";
+import { handleMongooseError } from "@/helpers";
 
 export const UserSubscription = {
   STARTER: "starter",
@@ -20,6 +20,8 @@ type UserType = {
   email: string;
   password: string;
   token?: string;
+  verify?: boolean;
+  verificationToken: string;
   subscription: "starter" | "pro" | "business";
 };
 
@@ -46,6 +48,14 @@ const userSchema = new Schema<UserType>(
     token: {
       type: String,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
     subscription: {
       type: String,
       enum: userSubscriptions,
@@ -67,10 +77,14 @@ const loginUserBodySchema = Joi.object({
   email: Joi.string().pattern(emailValidateRegex).required(),
   password: Joi.string().min(6).required(),
 });
+const verifyAgainEmailBodySchema = Joi.object({
+  email: Joi.string().pattern(emailValidateRegex).required(),
+});
 
 const schemas = {
   registerUserBodySchema,
   loginUserBodySchema,
+  verifyAgainEmailBodySchema,
 };
 
 const User = model<UserType>("user", userSchema);

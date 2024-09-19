@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const controllers_1 = require("../../controllers");
-const middlewares_1 = require("../../middlewares");
-const Book_1 = require("../../models/Book");
+const controllers_1 = require("@/controllers");
+const middlewares_1 = require("@/middlewares");
+const Book_1 = require("@/models/Book");
 const router = express_1.default.Router();
 // --------- GET all books from the list ---------
 router.get("/", middlewares_1.authenticate, controllers_1.BooksController.getAllBooks);

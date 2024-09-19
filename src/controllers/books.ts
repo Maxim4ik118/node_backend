@@ -11,8 +11,8 @@ import {
   updateFavorite,
 } from "../services";
 
-import { HttpError, ctrlWrapper } from "../helpers";
-import { BookType } from "../models";
+import { HttpError, ctrlWrapper } from "@/helpers";
+import { BookType } from "@/models";
 
 const postersPath = path.resolve("dist", "public", "posters");
 
@@ -67,7 +67,7 @@ const BooksController = {
 
     console.log(req.file!.path, newPath);
     await fs.rename(req.file!.path, newPath);
-    const poster = path.join("public", "posters", req.file!.filename);
+    const poster = path.join("posters", req.file!.filename);
     const createdBook = await add({ ...req.body, poster });
     // res.status(201).json(createdBook);
     res.status(201).json(createdBook);

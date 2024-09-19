@@ -11,6 +11,7 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "@elasticemail/elasticemail-client-ts-axios": "^4.0.22",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -20,18 +21,22 @@
     "express-async-errors": "^3.1.1",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nanoid": "3.3.4"
+    "nanoid": "3.3.4",
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.5",
+    "@types/module-alias": "^2.0.4",
     "@types/morgan": "^1.9.4",
     "@types/multer": "^1.4.11",
     "@types/node": "^18.15.11",
+    "@types/nodemailer": "^6.4.14",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
